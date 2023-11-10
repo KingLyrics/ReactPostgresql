@@ -15,9 +15,12 @@ export default function Card({ data }) {
             Date: {new Date(data.date).toLocaleString()}
           </h6>
           <p className="card-text set_width text-truncate">{data.content}</p>
-          <Link to={`/posts/${data.id}`} className="card-link">
-            Read More
-          </Link>
+          <div className="d-flex justify-content-between">
+            <Link to={`/posts/${data.id}`} className="card-link">
+              Read More
+            </Link>
+            <Link to={`/post/edit/${data.id}`}>Edit Post</Link>
+          </div>
         </div>
       </div>
     </div>

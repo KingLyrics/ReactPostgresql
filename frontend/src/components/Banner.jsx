@@ -12,7 +12,6 @@ export default function Banner() {
           <Nav className="me-auto">
             <Nav.Link href="/">All Posts</Nav.Link>
             <Nav.Link href="/newPost">Create New Post</Nav.Link>
-            <Nav.Link href="/">Edit Post</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
