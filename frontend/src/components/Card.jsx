@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import "../styles/Hompage.css";
+import { Link } from "react-router-dom";
 
 export default function Card({ data }) {
   return (
@@ -10,10 +11,13 @@ export default function Card({ data }) {
           <h6 className="card-subtitle mb-2 text-body-secondary">
             Authored By: {data.author}
           </h6>
+          <h6 className="card-subtitle mb-2 text-body-secondary">
+            Date: {new Date(data.date).toLocaleString()}
+          </h6>
           <p className="card-text set_width text-truncate">{data.content}</p>
-          <a href="#" className="card-link">
+          <Link to={`/posts/${data.id}`} className="card-link">
             Read More
-          </a>
+          </Link>
         </div>
       </div>
     </div>
