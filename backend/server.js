@@ -74,6 +74,24 @@ app.put("/api/posts/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/posts/:id", async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const result = await pool.query(
+      "DELETE FROM blog_posts WHERE id = $1 RETURNING *",
+      [postId]
+    );
+    if (result.rows.length > 0) {
+      res.json({ message: "Post deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Post not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting post: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
