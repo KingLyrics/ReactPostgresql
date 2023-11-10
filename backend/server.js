@@ -56,6 +56,24 @@ app.get("/api/posts/:id", async (req, res) => {
   } catch (error) {}
 });
 
+app.put("/api/posts/:id", async (req, res) => {
+  const PostId = req.params.id;
+  const { title, content, author } = req.body;
+  try {
+    const result = await pool.query(
+      "UPDATE blog_posts SET title = $1, content = $2, author = $3 WHERE id = $4 RETURNING *",
+      [title, content, author, PostId]
+    );
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ error: "Post not found" });
+    }
+  } catch (error) {
+    console.error("Error updating posts:", error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
