@@ -1,57 +1,60 @@
-import { useState } from "react";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Form, FloatingLabel } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
+// Use the VITE_ prefix for environment variables in Vite
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export default function CreatePost() {
+function EditPost() {
   const navigate = useNavigate();
-  const [newBlogPost, setnewBlogPost] = useState({
+  const { id } = useParams();
+  const [postData, setPostData] = useState({
     title: "",
-    content: "",
     author: "",
+    content: "",
   });
 
+  useEffect(() => {
+    axios
+      .get(`${apiUrl}/api/posts/${id}`)
+      .then((response) => {
+        setPostData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching blog posts: ", error);
+      });
+  }, [id]);
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setnewBlogPost({
-      ...newBlogPost,
-      [name]: value,
+    setPostData({
+      ...postData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${apiUrl}/api/posts/`, newBlogPost)
-      .then((response) => {
-        console.log("New Post Created: ", response.data);
-        setnewBlogPost({
-          title: "",
-          content: "",
-          author: "",
-        });
-        alert("Post created successfully!");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("Couldn't create new post:", error);
-      });
+    try {
+      await axios.put(`${apiUrl}/api/posts/${id}`, postData);
+      alert("Post has been edited");
+      navigate(`/posts/${id}`);
+    } catch (error) {
+      console.error("Couldn't update the post:", error);
+    }
   };
 
   return (
     <div className="container mt-5 text-center">
-      <h1 className="text-secondary pb-5">Create Post</h1>
-      <form onSubmit={handleSubmit} className="d-flex flex-column mb-3 ">
+      <h1 className="text-secondary pb-5">Edit Post</h1>
+      <form className="d-flex flex-column mb-3" onSubmit={handleSubmit}>
         <Form.Floating className="mb-3">
           <Form.Control
             id="floatingInputCustom"
             type="text"
             placeholder="Title Of The Blog"
             name="title"
-            value={newBlogPost.title}
+            value={postData.title}
             onChange={handleInputChange}
             required
           />
@@ -63,7 +66,7 @@ export default function CreatePost() {
             type="text"
             placeholder="Author Name"
             name="author"
-            value={newBlogPost.author}
+            value={postData.author}
             onChange={handleInputChange}
           />
           <label htmlFor="floatingPasswordCustom">Author Name</label>
@@ -73,9 +76,9 @@ export default function CreatePost() {
             as="textarea"
             placeholder="Leave a comment here"
             name="content"
-            value={newBlogPost.content}
-            onChange={handleInputChange}
             style={{ height: "100px" }}
+            value={postData.content}
+            onChange={handleInputChange}
           />
         </FloatingLabel>
         <button
@@ -89,3 +92,5 @@ export default function CreatePost() {
     </div>
   );
 }
+
+export default EditPost;
