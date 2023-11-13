@@ -1,6 +1,6 @@
 # React PostgreSQL Blog Project
 
-Welcome to the React PostgreSQL Blog project! This project is a full-stack web application that utilizes React for the frontend, PostgreSQL for the backend database, and a combination of controllers and routes to handle the backend logic. The frontend is styled using React Bootstrap for a clean and responsive user interface. While using Boostrap/React-Bootstap for the styling.
+Welcome to the React PostgreSQL Blog project! This project is a full-stack web application that utilizes React for the frontend, PostgreSQL for the backend database, and a combination of controllers and routes to handle the backend logic. The frontend is styled using React Bootstrap for a clean and responsive user interface. 
 
 ## Project Structure
 
